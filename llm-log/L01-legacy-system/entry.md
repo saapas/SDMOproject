@@ -1,33 +1,29 @@
-# L01: Test suite
+# L01: Legacy system
 
-- **Date / author:** [ ]
-- **LLM and version:** [ ]
-- **Goal:** [one sentence]
+- **LLM and version:** Claude Sonnet 5.5
+- **Goal:** To create the legacy system
 
 ## Context provided
-[files pasted, constraints and instructions given]
+The pdf file that describes the task
 
 ## Prompt
 ```text
-[exact prompt, verbatim]
+what would be a simple project for this? We have limited time
 ```
 
 ## Output
-See output-raw.md. Summary: [3 to 4 lines]
+output-raw.md.
 
 ## Review: issues found
 | # | Issue | How found | Severity |
 |---|---|---|---|
 | 1 | [ ] | [code review / test / static analysis / ran it] | [ ] |
 
-*Things to look for:* tests that only check status codes; missing failure cases (tampered ciphertext, unknown session, bad key); tests that still pass after you inject a defect (skip tag check, reuse nonce)
-
 ## Decision
-**Accepted / Modified / Rejected:** [what, and why]
-**Our changes:** [commit link or final.diff]
+**Accepted / Modified / Rejected:** Accepted
 
 ## Verification
-[tests added, commands run, CI link, results]
+
 
 ## Remaining risk
-[what is still uncertain or untrusted]
+
