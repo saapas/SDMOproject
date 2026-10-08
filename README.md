@@ -13,3 +13,12 @@ Known gaps (intentional, for the assignment):
 - no replay protection, sessions never expire, sessions held in memory only
 - gateway -> cloud hop is plaintext HTTP
 - containers run as root, unpinned dependencies
+
+## Baseline (Part 1)
+- Architecture: docs/architecture.md
+- Risks: docs/risk-register.md
+- Measurements (stack must be running):
+    pip install -r bench/requirements.txt
+    python bench/baseline.py
+  -> writes docs/baseline-results.md / .json. Run it 3 times and keep the median run.
+- Tag it:  git tag baseline-legacy
