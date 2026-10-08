@@ -1,2 +1,0 @@
-# SDMOproject
-university project

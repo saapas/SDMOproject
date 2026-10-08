@@ -1,0 +1,27 @@
+services:
+  cloud:
+    build: { context: ., dockerfile: cloud/Dockerfile }
+    environment: [DB_PATH=/data/readings.db, PYTHONUNBUFFERED=1]
+    volumes: ["./data:/data"]
+    ports: ["8000:8000"]
+
+  gateway:
+    build: { context: ., dockerfile: gateway/Dockerfile }
+    environment: [CLOUD_URL=http://cloud:8000, GATEWAY_ID=gateway-01, PYTHONUNBUFFERED=1]
+    depends_on: [cloud]
+    ports: ["8080:8080"]
+
+  sensor-1:
+    build: { context: ., dockerfile: device/Dockerfile }
+    environment: [DEVICE_ID=sensor-001, SENSOR_TYPE=temperature, GATEWAY_URL=http://gateway:8080, PYTHONUNBUFFERED=1]
+    depends_on: [gateway]
+
+  sensor-2:
+    build: { context: ., dockerfile: device/Dockerfile }
+    environment: [DEVICE_ID=sensor-002, SENSOR_TYPE=humidity, GATEWAY_URL=http://gateway:8080, PYTHONUNBUFFERED=1]
+    depends_on: [gateway]
+
+  sensor-3:
+    build: { context: ., dockerfile: device/Dockerfile }
+    environment: [DEVICE_ID=sensor-003, SENSOR_TYPE=pressure, GATEWAY_URL=http://gateway:8080, PYTHONUNBUFFERED=1]
+    depends_on: [gateway]
