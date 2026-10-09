@@ -4,7 +4,7 @@
 - **Goal:** To know if our previous project could be a good starting point and if the model would like to take inspiration from it so we can understand its proposals better.
 
 ## Context provided
-earlier discussions
+earlier discussions about the assignments criteria and provided context from the first entry.
 
 ## Prompts
 ```text
