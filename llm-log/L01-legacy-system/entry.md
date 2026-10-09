@@ -24,4 +24,4 @@ output-raw.md.
 Looked like a good proposal
 
 ## Remaining risk
-thought we had 7 weeks still remaining while we don't
+All the risks that we will mitigate later not PGC proof, no authentication eg.
