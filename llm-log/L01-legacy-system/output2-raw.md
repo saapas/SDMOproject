@@ -1,43 +1,40 @@
 # Raw LLM output: L01
 
-I'll build a small legacy system that matches the assignment: device → gateway → cloud, with ephemeral X25519 key exchange and AES-256-GCM. I'll run it before handing it over.
+The landing page only shows the top-level layout, so I’ll look inside the key folders.
 
-I've built the legacy baseline as a small Python project. I ran it locally (not in Docker) and it works end to end: the device handshakes, sends encrypted readings, and the gateway decrypts and forwards them to the cloud, which stores them in SQLite.
+I could only read the repo’s top level and docker-compose.yml. GitHub blocked me from opening the folders, so I haven’t seen your actual code. Here is what the compose file shows and how it maps to the assignment.
 
-What's in it
-legacy-pqc/
-├── common/kex_legacy.py   # X25519 + HKDF + AES-256-GCM (the part you'll replace with ML-KEM)
-├── device/device.py       # simulated sensor: handshake, then encrypted readings
-├── gateway/gateway.py     # FastAPI: /handshake, /telemetry, /health
-├── cloud/cloud.py         # FastAPI + SQLite: /readings, /health
-├── */Dockerfile, */requirements.txt
-├── docker-compose.yml     # cloud, gateway, 3 sensors
-└── README.md
+Architecture I can see
 
-Run it: docker compose up --build, then curl localhost:8000/readings.
+Sensors (3 containers) → MQTT broker (EMQX) → gateway-01 → cloud-api (HTTP, port 8000) → spark, which reads from a shared ./data volume. There is also an autoscaler.py and a 500-sensor load test.
 
-How it works
-The device generates an ephemeral X25519 key and POSTs it to /handshake.
-The gateway generates its own ephemeral key and returns it with a session_id. Both sides derive the AES-256 key via HKDF.
-The device sends {session_id, nonce, ciphertext} to /telemetry, with the device ID as the GCM associated data.
-The gateway decrypts the reading and forwards it to the cloud over plain HTTP.
-If the gateway returns 401 or 404, the device automatically redoes the handshake.
-Gaps left in on purpose
+What you can reuse directly
+Your repo	Assignment requirement
+Simulated sensors (devices/)	The simulated legacy device
+gateway/	The edge gateway
+cloud/	The cloud service
+docker-compose.yml	Test environment and deployment target. This is a head start on the ops part.
+run_load.py	Handshake and latency benchmarks, plus a realistic scale test
+Git history (26 commits)	Evidence of baseline work
+Suggested ML-KEM path
 
-These are your improvement targets, and also good material for the LLM-review table:
+You have two candidates:
 
-Gateway is not authenticated: the handshake is open to an active man-in-the-middle attack.
-No replay protection: sessions never expire and are kept in memory only.
-Plaintext gateway→cloud hop: an intentional limitation to document.
-No tests, CI/CD, metrics or structured logs.
-Container hygiene: containers run as root and dependencies are unpinned.
-Where ML-KEM goes in
+Gateway → cloud (HTTP). This is the easier one. The handshake is a simple request/response: POST /handshake returns the public key, the client replies with the ciphertext, and both sides derive an AES-GCM key. Only one client is involved.
+Sensor → gateway (over MQTT). This fits the “legacy device migration” story better, because sensors are the constrained devices. It is harder, though. The broker sits in the middle, so you need payload-level encryption and an asynchronous handshake over topics (for example gateway/pubkey and device/<id>/kem).
 
-You only need to touch three places:
+With limited time, I’d do path 1 first. Add path 2 only if you have time left, or describe it as future work.
 
-common/kex_legacy.py: add a hybrid function (ML-KEM-768 secret ‖ X25519 secret into HKDF).
-gateway.handshake(): add a protocol_version field, and keep the v1 path behind an ALLOW_LEGACY flag.
-device.handshake(): do the v2 flow, with fallback to v1.
-Difference from your repo
+What’s missing and where the work is
+CI/CD: there is no workflow visible, so you need to build it from scratch.
+Tests: I saw none at the top level.
+Monitoring: there are no health checks in the compose file, and I saw no metrics endpoint.
+emqx/emqx:latest: the image is unpinned. This is a good example of a finding to put in your LLM-review table.
+Ports 1883 and 18083 are exposed, and the broker is probably unauthenticated and plaintext. Note this as a known risk.
+version: "3.9" is obsolete in current Compose.
+Dockerfiles: check whether they run as root and whether the base images are pinned.
+Things to watch
+Spark and the autoscaler are outside the assignment’s scope. Don’t spend time on them. Keep them running if they work, or drop them from the PQ pipeline.
+Course rules: the assignment says each group gets a small starting system. Check with your instructor that using your own distributed-systems project is allowed.
 
-Your repo uses MQTT (EMQX) between sensors and gateway. I used plain HTTP so the handshake is a simple request/response and the code stays small. If you want to keep MQTT, the same crypto module works unchanged. Only the transport in device.py and gateway.py would change. I'd start with this HTTP version and port it later if there's time.
+If you paste the contents of gateway/ and cloud/ (the main files and Dockerfiles), I can give a concrete plan for where the handshake code goes and what to baseline first.
