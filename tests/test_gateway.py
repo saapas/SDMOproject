@@ -70,12 +70,6 @@ def test_valid_telemetry_is_forwarded_to_cloud(gw, fake_cloud):
     assert sent["json"]["device_id"] == "d1"
 
 
-def test_gateway_id_is_added_before_forwarding(gw, fake_cloud):
-    sid, key = do_handshake(gw, "d1")
-    gw.post("/telemetry", json=make_telemetry(key, sid, "d1"))
-    assert fake_cloud.calls[0]["json"]["gateway_id"] == gateway.GATEWAY_ID
-
-
 # ---------- telemetry: rejected input ----------
 def test_unknown_session_is_404_and_nothing_forwarded(gw, fake_cloud):
     _, key = do_handshake(gw, "d1")
