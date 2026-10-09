@@ -1,7 +1,5 @@
 # Raw LLM output: L01
 
-I’ll build a small legacy system that matches the assignment: device → gateway → cloud, with ephemeral X25519 key exchange and AES-256-GCM. I’ll run it before handing it over.
-
 I’ve built the legacy baseline as a small Python project. I ran it locally (not in Docker) and it works end to end: the device handshakes, sends encrypted readings, and the gateway decrypts and forwards them to the cloud, which stores them in SQLite.
 
 What’s in it
