@@ -4,7 +4,7 @@
 - **Goal:** To create the legacy system
 
 ## Context provided
-The pdf file that describes the task
+previous context
 
 ## Prompts
 ```text
