@@ -1,7 +1,7 @@
 # L01: Legacy system
 
 - **LLM and version:** Claude Sonnet 5.5
-- **Goal:** To create the legacy system
+- **Goal:** To get the idea for what the legacy system could be and get some directions to how to go forward.
 
 ## Context provided
 "-"
@@ -15,13 +15,13 @@
 output-raw.md.
 
 ## Review: issues found
-
+It looks like a solid plan and will will go forward with it
 
 ## Decision
 **Accepted / Modified / Rejected:** Accepted
 
 ## Verification
-Looked like a good proposal
+-
 
 ## Remaining risk
 All the risks that we will mitigate later not PGC proof, no authentication eg.
