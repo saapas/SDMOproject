@@ -58,7 +58,7 @@ def fake_cloud(monkeypatch):
     rec.calls = []
 
     def fake_post(url, json=None, timeout=None, **kw):
-        rec.calls.append({"url": url, "json": json})
+        rec.calls.append({"url": url, "json": json, "timeout": timeout})
         if rec.raise_exc:
             raise rec.raise_exc
         return FakeResponse(rec.status)

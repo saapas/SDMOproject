@@ -8,20 +8,20 @@ The pdf file that describes the task
 
 ## Prompts
 ```text
-i already have this project
-https://github.com/saapas/5gGateway
-can you tell what i can use from this?
+give me the legacy code for this project in python
 ```
 
 ## Output
-output2-raw.md.
+output3-raw.md.
 
 ## Review: issues found
-Not really what we looked for
+After review and running the program it worked fine
 
 ## Decision
-**Accepted / Modified / Rejected:** rejected
+**Accepted / Modified / Rejected:** Accepted
 
 ## Verification
+After running worked well
 
 ## Remaining risk
+Just the baseline legacy code. Everything that is needed to be added still remains.

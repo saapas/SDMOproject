@@ -1,10 +1,10 @@
 # Raw LLM output: L01
 
-I'll build a small legacy system that matches the assignment: device → gateway → cloud, with ephemeral X25519 key exchange and AES-256-GCM. I'll run it before handing it over.
+I’ll build a small legacy system that matches the assignment: device → gateway → cloud, with ephemeral X25519 key exchange and AES-256-GCM. I’ll run it before handing it over.
 
-I've built the legacy baseline as a small Python project. I ran it locally (not in Docker) and it works end to end: the device handshakes, sends encrypted readings, and the gateway decrypts and forwards them to the cloud, which stores them in SQLite.
+I’ve built the legacy baseline as a small Python project. I ran it locally (not in Docker) and it works end to end: the device handshakes, sends encrypted readings, and the gateway decrypts and forwards them to the cloud, which stores them in SQLite.
 
-What's in it
+What’s in it
 legacy-pqc/
 ├── common/kex_legacy.py   # X25519 + HKDF + AES-256-GCM (the part you'll replace with ML-KEM)
 ├── device/device.py       # simulated sensor: handshake, then encrypted readings
@@ -40,4 +40,4 @@ gateway.handshake(): add a protocol_version field, and keep the v1 path behind a
 device.handshake(): do the v2 flow, with fallback to v1.
 Difference from your repo
 
-Your repo uses MQTT (EMQX) between sensors and gateway. I used plain HTTP so the handshake is a simple request/response and the code stays small. If you want to keep MQTT, the same crypto module works unchanged. Only the transport in device.py and gateway.py would change. I'd start with this HTTP version and port it later if there's time.
+Your repo uses MQTT (EMQX) between sensors and gateway. I used plain HTTP so the handshake is a simple request/response and the code stays small. If you want to keep MQTT, the same crypto module works unchanged. Only the transport in device.py and gateway.py would change. I’d start with this HTTP version and port it later if there’s time.

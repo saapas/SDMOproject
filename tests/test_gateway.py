@@ -125,11 +125,26 @@ def test_valid_encryption_but_non_json_plaintext_is_401(gw, fake_cloud):
     assert r.status_code == 401
     assert fake_cloud.calls == []
 
+def test_every_handshake_uses_a_fresh_server_key(gw):
+    pubs = set()
+    for _ in range(20):
+        _, pub = kex.generate_keypair()
+        r = gw.post("/handshake", json={"device_id": "d1", "client_pub": b64(pub)})
+        pubs.add(r.json()["server_pub"])
+    assert len(pubs) == 20
 
-def test_garbage_base64_is_rejected_not_500(gw, fake_cloud):
-    sid, _ = do_handshake(gw, "d1")
-    r = gw.post("/telemetry", json={"session_id": sid, "nonce": "!!!", "ciphertext": "???"})
-    assert r.status_code in (400, 401, 422)
+@pytest.mark.parametrize("nonce,ciphertext", [
+    ("!!!", "???"),
+    ("", ""),
+    (b64(b"abc"), b64(b"x" * 20)),
+    ("abc", "abcde"),
+])
+def test_garbage_input_is_exactly_401_and_never_forwarded(gw, fake_cloud, nonce, ciphertext):
+    sid, key = do_handshake(gw, "d1")
+    r = gw.post("/telemetry", json={"session_id": sid, "nonce": nonce, "ciphertext": ciphertext})
+    assert r.status_code == 401
+    assert fake_cloud.calls == []
+    assert gw.post("/telemetry", json=make_telemetry(key, sid, "d1")).status_code == 202
 
 
 def test_missing_fields_are_422(gw):

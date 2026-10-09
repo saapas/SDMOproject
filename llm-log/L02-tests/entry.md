@@ -1,33 +1,27 @@
 # L02: Dockerfiles
 
-- **Date / author:** [ ]
-- **LLM and version:** [ ]
-- **Goal:** [one sentence]
+- **LLM and version:** Claude Sonnet 5.5
+- **Goal:** To provide tests for the legacy system
 
 ## Context provided
-[files pasted, constraints and instructions given]
+All the previous texts
 
 ## Prompt
 ```text
-[exact prompt, verbatim]
+we got this part finished and now move on to write the tests for this system. Write the tests.
 ```
 
 ## Output
-See output-raw.md. Summary: [3 to 4 lines]
+See output-raw.md
 
 ## Review: issues found
-| # | Issue | How found | Severity |
-|---|---|---|---|
-| 1 | [ ] | [code review / test / static analysis / ran it] | [ ] |
-
-*Things to look for:* root user; unpinned base image or packages; secrets in the image; large images; missing .dockerignore
+Some tests were loose and unneccessary and we added a defections
 
 ## Decision
-**Accepted / Modified / Rejected:** [what, and why]
-**Our changes:** [commit link or final.diff]
+**Accepted / Modified / Rejected:** Modified
 
 ## Verification
-[tests added, commands run, CI link, results]
+Reviewed and ran the tests
 
 ## Remaining risk
-[what is still uncertain or untrusted]
+Can't test for everything

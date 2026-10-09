@@ -29,6 +29,10 @@ MUTATIONS = [
     ("Cloud: newest-first ordering removed", "cloud/cloud.py", "ORDER BY id DESC", "ORDER BY id ASC"),
     ("Cloud: limit ignored", "cloud/cloud.py", "(min(limit, 1000),)", "(1000,)"),
     ("Device: never re-handshakes on 401/404", "device/device.py", "if r.status_code in (401, 404):", "if False:"),
+    ("Handshake: client key length check removed", "gateway/gateway.py", "if len(client_pub) != 32:", "if False:"),
+    ("Handshake: static server keypair for all sessions", "gateway/gateway.py", "priv, pub = kex.generate_keypair()", 'priv, pub = globals().setdefault("_S", kex.generate_keypair())'),
+    ("Gateway: no timeout on the cloud call", "gateway/gateway.py", "json=reading, timeout=5)", "json=reading)"),
+    ("Device: no timeouts on requests", "device/device.py", "timeout=5,", ""),
 ]
 
 

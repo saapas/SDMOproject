@@ -84,3 +84,21 @@ def test_device_survives_network_error_and_retries(monkeypatch):
     with pytest.raises(KeyboardInterrupt):
         dev.main()
     assert calls["n"] == 2
+    
+
+def test_all_outgoing_requests_set_a_timeout(pipeline, monkeypatch):
+    import requests
+    dev = pipeline["dev"]
+    timeouts = []
+    inner = requests.post
+
+    def spy(url, **kw):
+        timeouts.append(kw.get("timeout"))
+        return inner(url, **kw)
+
+    monkeypatch.setattr(requests, "post", spy)
+    monkeypatch.setattr(dev.time, "sleep", lambda s: (_ for _ in ()).throw(KeyboardInterrupt))
+    with pytest.raises(KeyboardInterrupt):
+        dev.main()
+    assert len(timeouts) >= 3
+    assert all(t is not None and t > 0 for t in timeouts)
