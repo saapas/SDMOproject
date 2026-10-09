@@ -15,7 +15,7 @@ give me the legacy code for this project in python
 output3-raw.md.
 
 ## Review: issues found
-After review and running the program it worked fine
+After review and running the program it worked fine, it looked like something that was easy to understand and had the things we were looking for.
 
 ## Decision
 **Accepted / Modified / Rejected:** Accepted
