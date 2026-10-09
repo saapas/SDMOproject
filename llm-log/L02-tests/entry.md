@@ -15,7 +15,7 @@ we got this part finished and now move on to write the tests for this system. Wr
 See output-raw.md
 
 ## Review: issues found
-Some tests were loose and unneccessary and we added a defections
+Some tests were loose and unneccessary and we added defections
 
 ## Decision
 **Accepted / Modified / Rejected:** Modified
