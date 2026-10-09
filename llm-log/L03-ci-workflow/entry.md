@@ -15,13 +15,13 @@ How would you suggest we build the CI/CD pipleine for this project?
 See output-raw.md
 
 ## Review: issues found
-
+On the first sight this proposal looks good so we will accept it
 
 ## Decision
-**Accepted / Modified / Rejected:** [what, and why]
+**Accepted / Modified / Rejected:** Accepted
 
 ## Verification
 
 
 ## Remaining risk
-
+There is the risk that it makes this too complicated or that it won't cover everything we would want.
