@@ -46,7 +46,7 @@ def handshake(req: HandshakeReq):
         priv, pub = kex.generate_keypair()
         key = kex.derive_session_key(priv, client_pub, req.device_id)
     except Exception:
-        raise HTTPException(400, "invalid handshake")
+        raise HTTPException(400, "invalid handshake") from None
     session_id = uuid.uuid4().hex
     sessions[session_id] = {"key": key, "device_id": req.device_id}
     return {"session_id": session_id, "server_pub": b64(pub), "suite": kex.SUITE}
@@ -61,12 +61,12 @@ def telemetry(req: TelemetryReq):
         plain = kex.decrypt(s["key"], unb64(req.nonce), unb64(req.ciphertext), s["device_id"].encode())
         reading = json.loads(plain)
     except (InvalidTag, ValueError):
-        raise HTTPException(401, "decryption failed")
+        raise HTTPException(401, "decryption failed") from None
 
     reading["gateway_id"] = GATEWAY_ID
     try:
         # Gateway -> cloud hop is plain HTTP (known limitation for the legacy baseline).
         requests.post(f"{CLOUD_URL}/readings", json=reading, timeout=5).raise_for_status()
     except requests.RequestException:
-        raise HTTPException(502, "cloud unreachable")
+        raise HTTPException(502, "cloud unreachable") from None
     return {"status": "forwarded"}

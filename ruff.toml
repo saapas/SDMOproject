@@ -1,0 +1,10 @@
+line-length = 120
+target-version = "py312"
+
+[lint]
+select = ["E", "F", "W", "I", "B"]
+ignore = ["E731"]   # short lambdas such as b64 = lambda b: ... are used on purpose
+
+[lint.per-file-ignores]
+"tests/*" = ["E501"]
+"bench/*" = ["E501"]

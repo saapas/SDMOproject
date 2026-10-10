@@ -57,4 +57,4 @@ def list_readings(limit: int = 50):
         (min(limit, 1000),),
     ).fetchall()
     conn.close()
-    return [dict(zip(("device_id", "gateway_id", "type", "value", "ts"), r)) for r in rows]
+    return [dict(zip(("device_id", "gateway_id", "type", "value", "ts"), r, strict=True)) for r in rows]

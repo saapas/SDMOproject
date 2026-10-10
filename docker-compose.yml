@@ -1,27 +1,46 @@
 services:
   cloud:
     build: { context: ., dockerfile: cloud/Dockerfile }
-    environment: [DB_PATH=/data/readings.db, PYTHONUNBUFFERED=1]
-    volumes: ["./data:/data"]
+    environment: [DB_PATH=/data/readings.db]
+    volumes: ["cloud-data:/data"]
     ports: ["8000:8000"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=2)"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
 
   gateway:
     build: { context: ., dockerfile: gateway/Dockerfile }
-    environment: [CLOUD_URL=http://cloud:8000, GATEWAY_ID=gateway-01, PYTHONUNBUFFERED=1]
-    depends_on: [cloud]
+    environment: [CLOUD_URL=http://cloud:8000, GATEWAY_ID=gateway-01]
+    depends_on:
+      cloud: { condition: service_healthy }
     ports: ["8080:8080"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8080/health', timeout=2)"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
 
   sensor-1:
     build: { context: ., dockerfile: device/Dockerfile }
-    environment: [DEVICE_ID=sensor-001, SENSOR_TYPE=temperature, GATEWAY_URL=http://gateway:8080, PYTHONUNBUFFERED=1]
-    depends_on: [gateway]
+    environment: [DEVICE_ID=sensor-001, SENSOR_TYPE=temperature, GATEWAY_URL=http://gateway:8080]
+    depends_on:
+      gateway: { condition: service_healthy }
 
   sensor-2:
     build: { context: ., dockerfile: device/Dockerfile }
-    environment: [DEVICE_ID=sensor-002, SENSOR_TYPE=humidity, GATEWAY_URL=http://gateway:8080, PYTHONUNBUFFERED=1]
-    depends_on: [gateway]
+    environment: [DEVICE_ID=sensor-002, SENSOR_TYPE=humidity, GATEWAY_URL=http://gateway:8080]
+    depends_on:
+      gateway: { condition: service_healthy }
 
   sensor-3:
     build: { context: ., dockerfile: device/Dockerfile }
-    environment: [DEVICE_ID=sensor-003, SENSOR_TYPE=pressure, GATEWAY_URL=http://gateway:8080, PYTHONUNBUFFERED=1]
-    depends_on: [gateway]
+    environment: [DEVICE_ID=sensor-003, SENSOR_TYPE=pressure, GATEWAY_URL=http://gateway:8080]
+    depends_on:
+      gateway: { condition: service_healthy }
+
+volumes:
+  cloud-data:

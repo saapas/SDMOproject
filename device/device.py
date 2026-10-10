@@ -35,7 +35,8 @@ def handshake():
 def read_sensor():
     ranges = {"temperature": (15, 30), "humidity": (30, 80), "pressure": (980, 1040)}
     lo, hi = ranges.get(SENSOR_TYPE, (0, 100))
-    return round(random.uniform(lo, hi), 2)
+    # simulated sensor data, not used for cryptography
+    return round(random.uniform(lo, hi), 2)  # nosec B311
 
 
 def main():
