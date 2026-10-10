@@ -67,6 +67,7 @@ def test_device_rehandshakes_after_gateway_loses_sessions(pipeline, monkeypatch)
 
 def test_device_survives_network_error_and_retries(monkeypatch):
     import requests
+
     from device import device as dev
 
     def boom(*a, **k):
@@ -84,7 +85,7 @@ def test_device_survives_network_error_and_retries(monkeypatch):
     with pytest.raises(KeyboardInterrupt):
         dev.main()
     assert calls["n"] == 2
-    
+
 
 def test_all_outgoing_requests_set_a_timeout(pipeline, monkeypatch):
     import requests
