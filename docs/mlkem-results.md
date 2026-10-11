@@ -1,17 +1,16 @@
 # ML-KEM benchmark results (hybrid-ml-kem-768-x25519-aesgcm)
 
-Environment: Windows, CPython 3.13.2, local Uvicorn cloud/gateway services
-(same environment as the matched legacy run)
+Machine / Docker settings: _fill in (CPU, RAM, Docker Desktop backend)_
 
 | Metric | Value |
 |---|---|
-| Handshake mean / p50 / p95 | 2.229 / 2.07 / 2.775 ms (n=200) |
-| Message latency mean / p50 / p95 | 17.834 / 11.182 / 33.505 ms (n=500) |
-| Throughput | 100.0 msg/s (20 devices, 500 msgs) |
+| Handshake mean / p50 / p95 | 43.685 / 43.765 / 44.107 ms (n=200) |
+| Message latency mean / p50 / p95 | 48.85 / 48.066 / 51.493 ms (n=500) |
+| Throughput | 173.8 msg/s (20 devices, 500 msgs) |
 | Handshake request / response size | 1696 / 1623 bytes |
 | Public material on the wire (raw) | client 1216 B, server response 1120 B |
-| Telemetry request size | 237 bytes |
-| Crypto only: keygen / encapsulate+decapsulate | 263.5 / 433.3 us |
+| Telemetry request size | 241 bytes |
+| Crypto only: keygen / encapsulate+decapsulate | 110.7 / 220.8 us |
 
 Handshake time includes the HTTP round trip plus client-side ML-KEM decapsulation
 and X25519 derivation. Message latency includes the gateway -> cloud hop and the

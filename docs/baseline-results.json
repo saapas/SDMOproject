@@ -2,23 +2,23 @@
   "suite": "legacy-x25519-aesgcm",
   "handshake": {
     "n": 200,
-    "mean_ms": 43.744,
-    "p50_ms": 43.939,
-    "p95_ms": 44.301,
-    "max_ms": 45.464
+    "mean_ms": 43.853,
+    "p50_ms": 43.95,
+    "p95_ms": 44.273,
+    "max_ms": 48.283
   },
   "message_latency": {
     "n": 500,
-    "mean_ms": 56.163,
-    "p50_ms": 56.042,
-    "p95_ms": 58.27,
-    "max_ms": 63.867
+    "mean_ms": 48.412,
+    "p50_ms": 48.101,
+    "p95_ms": 51.677,
+    "max_ms": 57.596
   },
   "throughput": {
     "devices": 20,
     "messages": 500,
-    "wall_s": 5.36,
-    "msgs_per_s": 93.4
+    "wall_s": 2.92,
+    "msgs_per_s": 171.1
   },
   "sizes": {
     "handshake_request_bytes": 87,
@@ -28,7 +28,7 @@
     "telemetry_request_bytes": 241
   },
   "crypto_only": {
-    "keygen_us": 25.7,
-    "derive_us": 27.2
+    "keygen_us": 26.1,
+    "derive_us": 28.3
   }
 }
