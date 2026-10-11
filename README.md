@@ -20,15 +20,108 @@ Known gaps (intentional, for the assignment):
 ## Baseline (Part 1)
 - Architecture: docs/architecture.md
 - Risks: docs/risk-register.md
-- Measurements (stack must be running):
-    pip install -r bench/requirements.txt
-    python bench/baseline.py
-  -> writes docs/baseline-results.md / .json. Run it 3 times and keep the median run.
 
-    python bench/mlkem.py
-  -> writes docs/mlkem-results.md / .json using the hybrid ML-KEM-768 suite.
-     Use the same N_HANDSHAKES, N_MESSAGES, N_DEVICES, and MSGS_PER_DEVICE
-     values as the baseline when comparing results.
+### Run the benchmarks
+
+Both benchmark scripts require the cloud and gateway services to be running
+on `localhost:8000` and `localhost:8080`.
+
+#### Option 1: Docker Compose
+
+From the repository root, build and start the stack:
+
+```powershell
+docker compose up --build -d
+```
+
+Check that the services are ready:
+
+```powershell
+Invoke-WebRequest http://localhost:8080/health
+Invoke-WebRequest http://localhost:8000/health
+```
+
+Install the benchmark dependencies in the Python environment used to run the
+scripts:
+
+```powershell
+python -m pip install -r bench/requirements.txt
+```
+
+Run the legacy and ML-KEM benchmarks with the same settings:
+
+```powershell
+$env:N_HANDSHAKES="200"
+$env:N_MESSAGES="500"
+$env:N_DEVICES="20"
+$env:MSGS_PER_DEVICE="25"
+
+python bench/baseline.py
+python bench/mlkem.py
+```
+
+Stop the stack when finished:
+
+```powershell
+docker compose down
+```
+
+#### Option 2: Run the services locally
+
+If Docker Desktop is unavailable, install the service dependencies:
+
+```powershell
+python -m pip install -r gateway/requirements.txt
+python -m pip install -r cloud/requirements.txt
+python -m pip install -r bench/requirements.txt
+```
+
+Open two PowerShell terminals from the repository root. Start the cloud in
+the first terminal:
+
+```powershell
+$env:DB_PATH="$PWD\.tmp-benchmark-readings.db"
+python -m uvicorn cloud.cloud:app --host 127.0.0.1 --port 8000
+```
+
+Start the gateway in the second terminal:
+
+```powershell
+$env:CLOUD_URL="http://127.0.0.1:8000"
+python -m uvicorn gateway.gateway:app --host 127.0.0.1 --port 8080
+```
+
+In a third terminal, verify the gateway and run the benchmarks:
+
+```powershell
+Invoke-WebRequest http://127.0.0.1:8080/health
+$env:GATEWAY_URL="http://127.0.0.1:8080"
+$env:N_HANDSHAKES="200"
+$env:N_MESSAGES="500"
+$env:N_DEVICES="20"
+$env:MSGS_PER_DEVICE="25"
+
+python bench/baseline.py
+python bench/mlkem.py
+```
+
+The ML-KEM benchmark measures the hybrid ML-KEM-768 + X25519 handshake,
+steady-state AES-GCM telemetry latency, throughput, request sizes, and
+crypto-only session-key establishment. It writes:
+
+- `docs/mlkem-results.md` — human-readable results table
+- `docs/mlkem-results.json` — raw measurements
+
+The legacy benchmark writes the corresponding files:
+
+- `docs/baseline-results.md`
+- `docs/baseline-results.json`
+
+For a fair comparison, run both scripts back-to-back in the same environment
+with the same values for `N_HANDSHAKES`, `N_MESSAGES`, `N_DEVICES`, and
+`MSGS_PER_DEVICE`. The report-ready comparison is in
+`docs/project-report.md`. Run each benchmark multiple times and compare
+medians when making performance claims.
 
 ## Tests (Part 2 of the work plan)
     pip install -r requirements-dev.txt
