@@ -15,3 +15,4 @@ every artefact is reviewed, verified and then accepted, modified or rejected.
 | L03 | CI workflow | [L03-ci-workflow](L03-ci-workflow/entry.md) | [ ] | [ ] | [ ] |
 | L04 | ML-KEM integration | [L04-mlkem-integration](L04-mlkem-integration/entry.md) | [ ] | [ ] | [ ] |
 | L05 | Metrics and logging | [L05-metrics-logging](L05-metrics-logging/entry.md) | [ ] | [ ] | [ ] |
+| L06 | AI drift audit skill | [L06-ai-drift-audit](L06-ai-drift-audit/entry.md) | [ ] | Features the LLM recommended (e.g. `ALLOW_LEGACY`) are described in the report but were never implemented | Audit reads code, does not run it; its own findings need review |
