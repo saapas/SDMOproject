@@ -1,33 +1,21 @@
-# L04: ML-KEM integration
+# L01: Legacy system
 
-- **Date / author:** [ ]
-- **LLM and version:** [ ]
-- **Goal:** [one sentence]
+- **LLM and version:** GPT 5.6 Luna
+- **Goal:** To get ML-KEM-768 working alongside X25519
 
 ## Context provided
-[files pasted, constraints and instructions given]
+"-"
 
-## Prompt
+## Prompts
 ```text
-[exact prompt, verbatim]
+  can you implement ML-KEM-768 on this project with necessary tests and then log the results of those tests
 ```
 
 ## Output
-See output-raw.md. Summary: [3 to 4 lines]
-
-## Review: issues found
-| # | Issue | How found | Severity |
-|---|---|---|---|
-| 1 | [ ] | [code review / test / static analysis / ran it] | [ ] |
-
-*Things to look for:* hallucinated or misused library functions; raw KEM secret used as AES key (no KDF); nonce reuse; version not bound into the KDF (downgrade); missing error handling for bad keys or ciphertexts; secrets logged
+output-raw.md.
 
 ## Decision
-**Accepted / Modified / Rejected:** [what, and why]
-**Our changes:** [commit link or final.diff]
+**Accepted / Modified / Rejected:** Accepted
 
 ## Verification
-[tests added, commands run, CI link, results]
-
-## Remaining risk
-[what is still uncertain or untrusted]
+The implementation that was made seems to work decently well and the logged metrics seem validated
