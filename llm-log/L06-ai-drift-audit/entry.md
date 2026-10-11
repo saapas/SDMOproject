@@ -19,7 +19,6 @@ reconfirm : No ALLOW_LEGACY anywhere.
 
 Prompt 2:
 ```text
-this is what I am adding:
 We noticed discrepancies where AI recommended something, it got carried into documentation but was never implemented.
 
 An example: ALLOW_LEGACY was planned and documented together with AI, but turns out in the end it was never implemented. We can see llm-log/L01-legacy-system/output3-raw.md has the LLM's recommendation "keep the v1 path behind an ALLOW_LEGACY flag". But not commit has been put in the code.
