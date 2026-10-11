@@ -223,3 +223,14 @@ The hybrid ML-KEM-768 + X25519 handshake is implemented and is the device defaul
 - **Suggested action:** add mutations for `kex_mlkem.py` (e.g. drop the X25519 secret from `_derive`, skip a length check), or limit the R6 claim to the legacy code.
 
 **Log entry:** this audit is recorded in `llm-log/L06-ai-drift-audit/`.
+
+## Addendum: changes on `main` after the audit (checked at `0d4f648`)
+
+Three commits landed while the audit ran (`ff46dbd`, `f06d831`, `0d4f648`). They change docs only;
+`git diff --stat 1c80362 0d4f648` shows no code changes.
+
+| Item | Change | Status now |
+|---|---|---|
+| D5 (risk register status) | R1 marked PARTIALLY MITIGATED, R7 and R9 marked MITIGATED | **Resolved.** R9 is partly true: B2, C1, C2 still open |
+| A3 (version/transcript in KDF) | R11 marked **MITIGATED** | **Drift has spread to the risk register.** Code unchanged: `common/kex_mlkem.py:79` still binds only `suite\|device_id`; no version field, no transcript, no downgrade test |
+| Report §3.4 legacy numbers | `docs/matched-baseline-results.md/.json` deleted | The report's legacy table now has no source in the repo (only in history, e.g. `git show 1c80362:docs/matched-baseline-results.md`); the hybrid table's source was overwritten earlier (see "Other observations") |
