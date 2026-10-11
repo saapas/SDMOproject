@@ -1,0 +1,34 @@
+{
+  "suite": "hybrid-ml-kem-768-x25519-aesgcm",
+  "handshake": {
+    "n": 200,
+    "mean_ms": 2.229,
+    "p50_ms": 2.07,
+    "p95_ms": 2.775,
+    "max_ms": 19.19
+  },
+  "message_latency": {
+    "n": 500,
+    "mean_ms": 17.834,
+    "p50_ms": 11.182,
+    "p95_ms": 33.505,
+    "max_ms": 41.46
+  },
+  "throughput": {
+    "devices": 20,
+    "messages": 500,
+    "wall_s": 5.0,
+    "msgs_per_s": 100.0
+  },
+  "sizes": {
+    "handshake_request_bytes": 1696,
+    "handshake_response_bytes": 1623,
+    "client_public_material_raw_bytes": 1216,
+    "server_response_material_raw_bytes": 1120,
+    "telemetry_request_bytes": 237
+  },
+  "crypto_only": {
+    "keygen_us": 263.5,
+    "encapsulate_decapsulate_us": 433.3
+  }
+}

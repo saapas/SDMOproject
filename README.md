@@ -5,7 +5,10 @@ device --(X25519 + AES-256-GCM over HTTP)--> gateway --(plain HTTP)--> cloud (SQ
 Run:  docker compose up --build
 Check: curl localhost:8000/readings   |   curl localhost:8080/health
 
-Key code to replace with ML-KEM: common/kex_legacy.py (+ /handshake in gateway, handshake() in device).
+Key exchange code: `common/kex_mlkem.py` implements the default hybrid
+ML-KEM-768 + X25519 handshake used by the device and gateway. The legacy
+X25519 implementation remains in `common/kex_legacy.py` for migration
+compatibility and test comparison.
 
 Known gaps (intentional, for the assignment):
 - no tests, no CI/CD, no metrics/structured logs
@@ -21,6 +24,11 @@ Known gaps (intentional, for the assignment):
     pip install -r bench/requirements.txt
     python bench/baseline.py
   -> writes docs/baseline-results.md / .json. Run it 3 times and keep the median run.
+
+    python bench/mlkem.py
+  -> writes docs/mlkem-results.md / .json using the hybrid ML-KEM-768 suite.
+     Use the same N_HANDSHAKES, N_MESSAGES, N_DEVICES, and MSGS_PER_DEVICE
+     values as the baseline when comparing results.
 
 ## Tests (Part 2 of the work plan)
     pip install -r requirements-dev.txt

@@ -7,7 +7,7 @@ import time
 
 import requests
 
-from common import kex_legacy as kex
+from common import kex_mlkem as kex
 
 DEVICE_ID = os.getenv("DEVICE_ID", "sensor-001")
 SENSOR_TYPE = os.getenv("SENSOR_TYPE", "temperature")
@@ -19,15 +19,25 @@ unb64 = base64.b64decode
 
 
 def handshake():
-    priv, pub = kex.generate_keypair()
+    kem_secret, kem_public, x25519_private, x25519_public = kex.generate_keypair()
     r = requests.post(
         f"{GATEWAY_URL}/handshake",
-        json={"device_id": DEVICE_ID, "client_pub": b64(pub)},
+        json={
+            "device_id": DEVICE_ID,
+            "kem_public_key": b64(kem_public),
+            "x25519_public_key": b64(x25519_public),
+        },
         timeout=5,
     )
     r.raise_for_status()
     body = r.json()
-    key = kex.derive_session_key(priv, unb64(body["server_pub"]), DEVICE_ID)
+    key = kex.decapsulate(
+        kem_secret,
+        unb64(body["kem_ciphertext"]),
+        x25519_private,
+        unb64(body["server_pub"]),
+        DEVICE_ID,
+    )
     print(f"[{DEVICE_ID}] handshake ok, session={body['session_id']}", flush=True)
     return body["session_id"], key
 
